@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -42,15 +43,19 @@ class PostController extends Controller
             [
                 'title' => 'required|max:255|min:5',
                 'content' => 'nullable|max:65000',
-                'slug' => 'required|unique:posts|max:255'
             ]
         );
         $data = $request->all();
+
         $newPost = new Post();
         $newPost->fill($data);
+
+        $slug = $this->getSlug($newPost->title);
+
+        $newPost->slug = $slug;
         $newPost->save();
 
-        return redirect()->route('admin.posts.index')->with('status', 'Post successfully create!');
+        return redirect()->route('admin.posts.index')->with('status', 'Post successfully created!');
     }
 
     /**
@@ -87,14 +92,17 @@ class PostController extends Controller
         $request->validate(
             [
                 'title' => 'required|max:255|min:5',
-                'content' => 'nullable|max:65000',
-                'slug' => 'required|unique:posts|max:255'
+                'content' => 'nullable|max:65000'
             ]
         );
         $data = $request->all();
+
+        if ($post->title != $data['title']) {
+            $data['slug'] = $this->getSlug($data['title']);
+        }
+
         $post->update($data);
-        $post->save();
-        return redirect()->route('admin.posts.show', compact('post'))->with('status', 'Post updated!');
+        return redirect()->route('admin.posts.show', compact('post'))->with('status', 'Post successfully updated!');
     }
 
     /**
@@ -106,6 +114,24 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.index')->with('status', 'post succesfully deleted!');
+    }
+
+    protected function getSlug($title) {
+
+        $slug = Str::slug($title, '-');
+
+        $checkPost = Post::where('slug', $slug)->first();
+
+        $counter = 1;
+
+        while($checkPost) {
+            $slug = Str::slug($title . '-' . $counter, '-');
+            $counter++;
+            $checkPost = Post::where('slug', $slug)->first();
+        }
+
+        return $slug;
+
     }
 }
