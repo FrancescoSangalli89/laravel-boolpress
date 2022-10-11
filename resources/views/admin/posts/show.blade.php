@@ -5,6 +5,7 @@
         <div>Title: {{$post->title}}</div>
         <div>Content: {{$post->content}}</div>
         <div>Slug: {{$post->slug}}</div>
+        <div>Category: {{($post->category)?$post->category->name:''}}</div>
         <a class="btn btn-primary" href="{{route('admin.posts.index')}}">Back to posts</a>
     </div>
 @endsection

@@ -9,6 +9,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Title</th>
                     <th scope="col">Slug</th>
+                    <th scope="col">Category</th>
                     <th scope="col">Show</th>
                     <th scope="col">Edit</th>
                     <th scope="col">Delete</th>
@@ -20,6 +21,7 @@
                         <th scope="row">{{$post->id}}</th>
                         <td>{{$post->title}}</td>
                         <td>{{$post->slug}}</td>
+                        <td>{{($post->category)?$post->category->name:''}}</td>
                         <td><a class="btn btn-primary" href="{{route('admin.posts.show', $post)}}">Show</a></td>
                         <td><a class="btn btn-warning" href="{{route('admin.posts.edit', $post)}}">Edit</a></td>
                         <td>

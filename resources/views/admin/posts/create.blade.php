@@ -4,6 +4,22 @@
     <form action="{{ route('admin.posts.store') }}" method="POST">
         @csrf
         <div class="mb-3">
+            <label for="category_id" class="form-label">Category</label>
+            <select class="form-control @error('category_id') is-invalid @enderror" name="category_id" id="category_id">
+                    <option {{(old('category_id')=='')?'selected':''}} value="">No category</option>
+                @foreach ($categories as $category)
+                    <option {{(old('category_id')==$category->id)?'selected':''}} value="{{$category->id}}">
+                        {{$category->name}}
+                    </option>
+                @endforeach
+            </select>
+            @error('category_id')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
+        <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control @error('title') is-invalid @enderror" required id="title" name="title"
                 value="{{ old('title') }}">
