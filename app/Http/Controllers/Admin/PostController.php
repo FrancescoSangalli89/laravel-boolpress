@@ -47,7 +47,8 @@ class PostController extends Controller
             [
                 'title' => 'required|max:255|min:5',
                 'content' => 'nullable|max:65000',
-                'category_id' => 'nullable|exists:categories,id'
+                'category_id' => 'nullable|exists:categories,id',
+                'tags' => 'exists:tags,id'
             ]
         );
         $data = $request->all();
@@ -60,6 +61,10 @@ class PostController extends Controller
         $newPost->slug = $slug;
         $newPost->save();
 
+        if (array_key_exists('tags', $data)) {
+            $newPost->tags()->sync($data['tags']);
+        }
+        
         return redirect()->route('admin.posts.index')->with('status', 'Post successfully created!');
     }
 
