@@ -49,17 +49,7 @@ class CategoryController extends Controller
         $category = new Category();
         $category->fill($data);
 
-        $slug = Str::slug($category->name, '-');
-
-        $checkPost = Category::where('slug', $slug)->first();
-
-        $counter = 1;
-
-        while ($checkPost) {
-            $slug = Str::slug($category->name . '-' . $counter, '-');
-            $counter++;
-            $checkPost = Category::where('slug', $slug)->first();
-        }
+        $slug = $this->getSlug($category->name);
 
         $category->slug = $slug;
         $category->save();
@@ -107,21 +97,7 @@ class CategoryController extends Controller
         $data = $request->all();
 
         if ($category->name != $data['name']) {
-
-
-            $slug = Str::slug($category->name, '-');
-
-            $checkPost = Category::where('slug', $slug)->first();
-
-            $counter = 1;
-
-            while ($checkPost) {
-                $slug = Str::slug($category->name . '-' . $counter, '-');
-                $counter++;
-                $checkPost = Category::where('slug', $slug)->first();
-            }
-
-            $category->slug = $slug;
+            $data['slug'] = $this->getSlug($data['name']);
         }
 
         $category->update($data);
@@ -139,5 +115,23 @@ class CategoryController extends Controller
     {
         $category->delete();
         return redirect()->route('admin.categories.index')->with('status', 'Category successfully deleted');
+    }
+
+    protected function getSlug($name) {
+
+        $slug = Str::slug($name, '-');
+
+        $checkPost = Category::where('slug', $slug)->first();
+
+        $counter = 1;
+
+        while($checkPost) {
+            $slug = Str::slug($name . '-' . $counter, '-');
+            $counter++;
+            $checkPost = Category::where('slug', $slug)->first();
+        }
+
+        return $slug;
+
     }
 }

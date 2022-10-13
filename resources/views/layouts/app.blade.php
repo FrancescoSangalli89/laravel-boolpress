@@ -43,6 +43,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.categories.index') }}">Gestione Category</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.tags.index') }}">Gestione Tag</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
