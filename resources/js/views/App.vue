@@ -1,13 +1,20 @@
 <template>
-    <div class="container text-center mt-5">
-        <h1>Work in progress</h1>
-        <h2>Sito in costruzione</h2>
+    <div>
+        <MyHeader/>
+        <MyMain/>
     </div>
 </template>
 
 <script>
+
+    import MyHeader from "../components/MyHeader.vue";
+    import MyMain from "../components/MyMain.vue";
+
     export default {
         name: 'App',
-        components: { }
+        components: { 
+            MyHeader,
+            MyMain
+        }
     }
 </script>
