@@ -2045,10 +2045,19 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'PostPage',
+  data: function data() {
+    return {
+      post: null
+    };
+  },
   methods: {
     getPost: function getPost() {
+      var _this = this;
+
       var slug = this.$route.params.slug;
-      axios.get('/api/posts/' + slug).then(function (response) {});
+      axios.get('/api/posts/' + slug).then(function (response) {
+        _this.post = response.data.result;
+      });
     }
   },
   mounted: function mounted() {
@@ -2418,7 +2427,32 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("h1", [_vm._v("Single post")]);
+  return _c("div", [_vm.post ? _c("article", [_c("h1", {
+    staticClass: "mb-3"
+  }, [_vm._v(_vm._s(_vm.post.title))]), _vm._v(" "), _c("p", {
+    staticClass: "mb-3"
+  }, [_vm._v(_vm._s(_vm.post.content))]), _vm._v(" "), _c("div", {
+    staticClass: "mb-3"
+  }, [_vm._v("Category: " + _vm._s(_vm.post.category ? _vm.post.category.name : "-"))]), _vm._v(" "), _vm._l(_vm.post.tags, function (tag) {
+    return _c("span", {
+      key: tag.id,
+      staticClass: "badge rounded-pill text-bg-primary me-2"
+    }, [_vm._v(_vm._s(tag.name))]);
+  }), _vm._v(" "), _c("div", [_c("router-link", {
+    staticClass: "btn btn-primary mt-3",
+    attrs: {
+      to: {
+        name: "postsPage"
+      }
+    }
+  }, [_vm._v("Back to posts")])], 1)], 2) : _c("div", {
+    staticClass: "spinner-border",
+    attrs: {
+      role: "status"
+    }
+  }, [_c("span", {
+    staticClass: "visually-hidden"
+  }, [_vm._v("Loading...")])])]);
 };
 
 var staticRenderFns = [];

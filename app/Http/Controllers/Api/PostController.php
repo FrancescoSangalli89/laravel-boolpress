@@ -34,20 +34,20 @@ class PostController extends Controller
      */
     public function show($slug)
     {
-        $post = Post::where('slug', $slug)->first();
+        $post = Post::where('slug', $slug)->with(['category', 'tags'])->first();
 
         if ($post) {
             return response()->json(
                 [
                     'success' => true,
-                    'results' => $post
+                    'result' => $post
                 ]
             );
         } else {
             return response()->json(
                 [
                     'success' => false,
-                    'results' => "this post doesn't exists"
+                    'result' => "this post doesn't exists"
                 ]
             );
         }
